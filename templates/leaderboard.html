@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - Quiz Master{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-primary">
+                <i class="fas fa-trophy me-3"></i>Leaderboard
+            </h1>
+            <p class="lead text-muted">See who's leading the pack in Quiz Master!</p>
+        </div>
+    </div>
+</div>
+
+{% if top_scores %}
+<!-- Top 3 Podium -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-crown text-warning me-2"></i>Top Performers
+                </h3>
+                <div class="row justify-content-center">
+                    {% for i in range(3) %}
+                    {% if i < top_scores|length %} {% set score=top_scores[i] %} {% if score[2]> 0 %}
+                        {% set percentage = (score[1] / score[2] * 100)|round(1) %}
+                        {% else %}
+                        {% set percentage = 0 %}
+                        {% endif %}
+                        <div class="col-md-4 text-center">
+                            <div class="position-relative">
+                                {% if i == 0 %}
+                                <div class="position-absolute top-0 start-50 translate-middle">
+                                    <i class="fas fa-crown fa-2x text-warning"></i>
+                                </div>
+                                {% endif %}
+                                <div class="podium-place bg-{{ 'warning' if i == 0 else 'secondary' if i == 1 else 'danger' }} text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                    style="width: 120px; height: 120px; font-size: 2rem; font-weight: bold;">
+                                    {{ i + 1 }}
+                                </div>
+                                <h4 class="fw-bold">{{ score[0] }}</h4>
+                                <p class="mb-1">
+                                    <span
+                                        class="badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }} fs-6">
+                                        {{ percentage }}%
+                                    </span>
+                                </p>
+                                <p class="text-muted mb-1">{{ score[1] }}/{{ score[2] }} correct</p>
+                                <p class="text-muted small">{{ score[3].strftime('%Y-%m-%d') }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full Leaderboard Table -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-list-ol me-2"></i>Complete Leaderboard
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Date</th>
+                        <th>Achievement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(top_scores|length) %}
+                    {% set score = top_scores[i] %}
+                    {% if score[2] > 0 %}
+                    {% set percentage = (score[1] / score[2] * 100)|round(1) %}
+                    {% else %}
+                    {% set percentage = 0 %}
+                    {% endif %}
+                    <tr
+                        class="{{ 'table-warning' if i == 0 else 'table-light' if i == 1 else 'table-danger' if i == 2 else '' }}">
+                        <td>
+                            {% if i == 0 %}
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            {% elif i == 1 %}
+                            <i class="fas fa-medal text-secondary me-2"></i>
+                            {% elif i == 2 %}
+                            <i class="fas fa-award text-danger me-2"></i>
+                            {% endif %}
+                            <strong>{{ i + 1 }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{ score[0] }}</strong>
+                        </td>
+                        <td>{{ score[1] }}/{{ score[2] }}</td>
+                        <td>
+                            <span
+                                class="badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
+                                {{ percentage }}%
+                            </span>
+                        </td>
+                        <td>{{ score[3].strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            {% if percentage >= 90 %}
+                            <i class="fas fa-star text-warning"></i> Perfect Score
+                            {% elif percentage >= 80 %}
+                            <i class="fas fa-fire text-danger"></i> Excellent
+                            {% elif percentage >= 70 %}
+                            <i class="fas fa-thumbs-up text-success"></i> Great Job
+                            {% elif percentage >= 60 %}
+                            <i class="fas fa-check text-primary"></i> Good
+                            {% else %}
+                            <i class="fas fa-meh text-warning"></i> Keep Trying
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h4>
+                    {% set unique_users = 0 %}
+                    {% set seen_users = [] %}
+                    {% for score in top_scores %}
+                    {% if score[0] not in seen_users %}
+                    {% set unique_users = unique_users + 1 %}
+                    {% set seen_users = seen_users + [score[0]] %}
+                    {% endif %}
+                    {% endfor %}
+                    {{ unique_users }}
+                </h4>
+                <p class="mb-0">Unique Participants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h4>
+                    {% set total_score = 0 %}
+                    {% set total_questions = 0 %}
+                    {% for score in top_scores %}
+                    {% set total_score = total_score + score[1] %}
+                    {% set total_questions = total_questions + score[2] %}
+                    {% endfor %}
+                    {% if total_questions > 0 %}
+                    {{ "%.1f"|format((total_score / total_questions * 100)|round(1)) }}%
+                    {% else %}
+                    0%
+                    {% endif %}
+                </h4>
+                <p class="mb-0">Average Score</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h4>
+                    {% set max_score = 0 %}
+                    {% for score in top_scores %}
+                    {% if score[1] > max_score %}
+                    {% set max_score = score[1] %}
+                    {% endif %}
+                    {% endfor %}
+                    {{ max_score }}
+                </h4>
+                <p class="mb-0">Highest Score</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- No Leaderboard Data -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-trophy fa-4x text-muted mb-3"></i>
+                <h3 class="text-muted">No Leaderboard Data Yet</h3>
+                <p class="text-muted mb-4">Be the first to take a quiz and claim the top spot!</p>
+                {% if session.user_id %}
+                <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-play me-2"></i>Take Quiz Now
+                </a>
+                {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Join Now
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- How to Climb the Leaderboard -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>How to Climb the Leaderboard
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-book fa-2x text-primary mb-2"></i>
+                            <h6>Study Regularly</h6>
+                            <p class="small text-muted">Practice makes perfect!</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-clock fa-2x text-success mb-2"></i>
+                            <h6>Manage Time</h6>
+                            <p class="small text-muted">Answer quickly but accurately</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-redo fa-2x text-warning mb-2"></i>
+                            <h6>Retake Quizzes</h6>
+                            <p class="small text-muted">Improve your scores</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-target fa-2x text-danger mb-2"></i>
+                            <h6>Focus on Weak Areas</h6>
+                            <p class="small text-muted">Identify and improve</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Quiz Master{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center py-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold text-primary mb-4">
+                <i class="fas fa-brain me-3"></i>Test Your Knowledge
+            </h1>
+            <p class="lead mb-4">
+                Challenge yourself with our interactive quizzes. Track your progress, compete with others, and improve
+                your skills across various topics.
+            </p>
+            {% if not session.user_id %}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                    <i class="fas fa-user-plus me-2"></i>Get Started
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            </div>
+            {% else %}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                    <i class="fas fa-play me-2"></i>Take Quiz
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-lg px-4">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-6">
+            <div class="hero-image">
+                <i class="fas fa-question-circle" style="font-size: 15rem; color: #e3f2fd;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section py-5">
+    <h2 class="text-center mb-5">Why Choose Quiz Master?</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Track Progress</h5>
+                    <p class="card-text">Monitor your performance over time with detailed analytics and progress
+                        tracking.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-trophy fa-3x text-warning"></i>
+                    </div>
+                    <h5 class="card-title">Compete & Win</h5>
+                    <p class="card-text">Compete with other users on our leaderboard and strive for the top spot.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-clock fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title">Timed Challenges</h5>
+                    <p class="card-text">Test your knowledge under pressure with timed quizzes and real-time feedback.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-section py-5 bg-light">
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="stat-item">
+                <h3 class="text-primary fw-bold">1000+</h3>
+                <p class="text-muted">Active Users</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-item">
+                <h3 class="text-primary fw-bold">50+</h3>
+                <p class="text-muted">Quiz Categories</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-item">
+                <h3 class="text-primary fw-bold">10,000+</h3>
+                <p class="text-muted">Quizzes Taken</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-item">
+                <h3 class="text-primary fw-bold">95%</h3>
+                <p class="text-muted">User Satisfaction</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="cta-section py-5 text-center">
+    <h2 class="mb-4">Ready to Test Your Knowledge?</h2>
+    <p class="lead mb-4">Join thousands of users who are already improving their skills with Quiz Master.</p>
+    {% if not session.user_id %}
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-rocket me-2"></i>Start Your Journey
+    </a>
+    {% else %}
+    <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-play me-2"></i>Take a Quiz Now
+    </a>
+    {% endif %}
+</div>
+{% endblock %}

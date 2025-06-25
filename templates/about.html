@@ -3,84 +3,145 @@
 {% block title %}About - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body p-5">
-                <div class="text-center mb-5">
-                    <i class="fas fa-info-circle fa-3x text-primary mb-3"></i>
-                    <h1 class="card-title">About Quiz Master</h1>
-                    <p class="lead text-muted">Learn more about our mission and vision</p>
-                </div>
+<style>
+    .about-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3><i class="fas fa-bullseye me-2 text-primary"></i>Our Mission</h3>
-                        <p class="mb-4">
-                            At Quiz Master, we believe that learning should be engaging, interactive, and fun.
-                            Our mission is to provide a platform where users can test their knowledge, track their
-                            progress,
-                            and compete with others in a supportive environment.
-                        </p>
+    .about-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #3f51b5;
+        margin-bottom: 0.5rem;
+    }
 
-                        <h3><i class="fas fa-eye me-2 text-primary"></i>Our Vision</h3>
-                        <p class="mb-4">
-                            We envision a world where learning is accessible to everyone, regardless of their background
-                            or location. Through our interactive quiz platform, we aim to make education more engaging
-                            and help users develop a love for continuous learning.
-                        </p>
-                    </div>
+    .about-header p {
+        color: #888;
+        font-size: 1.2rem;
+    }
 
-                    <div class="col-md-6">
-                        <h3><i class="fas fa-star me-2 text-primary"></i>What We Offer</h3>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Interactive quizzes across
-                                multiple categories</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Real-time progress tracking
-                            </li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Competitive leaderboards</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Detailed performance
-                                analytics</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>User-friendly interface</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Mobile-responsive design</li>
-                        </ul>
+    .about-content {
+        max-width: 800px;
+        margin: 0 auto 2.5rem auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        padding: 2rem 2.5rem;
+        font-size: 1.15rem;
+        color: #222b45;
+    }
 
-                        <h3><i class="fas fa-users me-2 text-primary"></i>Our Community</h3>
-                        <p>
-                            Join thousands of learners who are already using Quiz Master to improve their knowledge
-                            and skills. Our community is diverse, supportive, and always growing.
-                        </p>
-                    </div>
-                </div>
+    .about-features-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+    }
 
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h4><i class="fas fa-heart text-danger me-2"></i>Why Choose Quiz Master?</h4>
-                                <div class="row mt-4">
-                                    <div class="col-md-4">
-                                        <i class="fas fa-graduation-cap fa-2x text-primary mb-2"></i>
-                                        <h5>Educational</h5>
-                                        <p>Learn while having fun with our carefully crafted questions</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
-                                        <h5>Competitive</h5>
-                                        <p>Compete with others and climb the leaderboard</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
-                                        <h5>Analytics</h5>
-                                        <p>Track your progress and identify areas for improvement</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    .about-feature-col {
+        flex: 1 1 220px;
+        min-width: 200px;
+        max-width: 320px;
+        background: linear-gradient(135deg, #e3f0ff 0%, #f5faff 100%);
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.06);
+        padding: 1.5rem 1rem;
+        text-align: center;
+    }
+
+    .about-feature-col i {
+        font-size: 2.2rem;
+        color: #3f51b5;
+        margin-bottom: 0.5rem;
+    }
+
+    .about-feature-col h5 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1a237e;
+    }
+
+    .about-feature-col p {
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .about-cta {
+        text-align: center;
+        margin-top: 2.5rem;
+    }
+
+    .about-cta a {
+        display: inline-block;
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 0.75rem 2.5rem;
+        border-radius: 24px;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(67, 233, 123, 0.08);
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .about-cta a:hover {
+        background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%);
+        box-shadow: 0 4px 16px rgba(67, 233, 123, 0.16);
+    }
+
+    @media (max-width: 900px) {
+        .about-features-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .about-feature-col {
+            max-width: 100%;
+        }
+
+        .about-content {
+            padding: 1.5rem 1rem;
+        }
+    }
+</style>
+<div class="about-header">
+    <h1>About Quiz Master</h1>
+    <p>Empowering learning through fun and interactive quizzes!</p>
+</div>
+<div class="about-content">
+    <p>
+        Quiz Master is a modern web application designed to make learning engaging and effective. Whether you're a
+        student, professional, or lifelong learner, our platform offers a wide range of quizzes to test your knowledge,
+        track your progress, and compete with others on the leaderboard. Built with a focus on user experience, Quiz
+        Master is intuitive, responsive, and accessible on any device.
+    </p>
+</div>
+<div class="about-features-row">
+    <div class="about-feature-col">
+        <i class="fas fa-question-circle"></i>
+        <h5>Challenging Quizzes</h5>
+        <p>Wide variety of questions to keep you on your toes and help you learn more.</p>
     </div>
+    <div class="about-feature-col">
+        <i class="fas fa-chart-line"></i>
+        <h5>Track Progress</h5>
+        <p>Monitor your scores and see how you improve over time.</p>
+    </div>
+    <div class="about-feature-col">
+        <i class="fas fa-trophy"></i>
+        <h5>Leaderboard</h5>
+        <p>Compete with friends and users worldwide for the top spot.</p>
+    </div>
+    <div class="about-feature-col">
+        <i class="fas fa-mobile-alt"></i>
+        <h5>Mobile Friendly</h5>
+        <p>Enjoy a seamless experience on any device, anytime, anywhere.</p>
+    </div>
+</div>
+<div class="about-cta">
+    <a href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i> Get Started</a>
 </div>
 {% endblock %}

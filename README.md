@@ -1,57 +1,78 @@
-# Quiz Master
+# Fullstack Quiz Application
 
-A simple quiz application built with Flask and MySQL. Users can register, take quizzes, and compete on the leaderboard.
+Designed and developed a dynamic and responsive Fullstack Quiz Application using Python, Flask, and SQLite for the backend, and vanilla JavaScript, HTML, and CSS for the frontend. This application allows users to test their knowledge with interactive and timed quizzes, track their scores, and view their rankings on a leaderboard. It features a modern, user-friendly interface with engaging animations and a seamless user experience.
 
-## Features
+## ✨ Key Features
 
-- User registration and login
-- Interactive quiz interface
-- Real-time scoring and results
-- Leaderboard with unique user tracking
-- Responsive design with Bootstrap
+- **User Authentication**: Secure user registration and login system with session management.
+- **Interactive Quiz Interface**: A modern, engaging, and responsive quiz interface with real-time feedback.
+- **Timed Quizzes**: Questions are timed to add a challenging element for users.
+- **Dynamic Question Loading**: Questions are loaded dynamically from a JavaScript array.
+- **Score & Results Tracking**: Users can view their scores, percentages, and time taken upon quiz completion.
+- **Persistent Results**: Quiz results are saved to the database, tracking each user's performance over time.
+- **Leaderboard**: A global leaderboard displays the top-performing users.
+- **Modern Frontend**: Stylish and responsive UI built with Bootstrap and enhanced with custom CSS, featuring gradients, animations, and a professional look.
 
-## Setup
+## 🛠️ Tech Stack
 
-1. Install Python dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+- **Backend**: Python, Flask
+- **Database**: SQLite
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Styling**: Custom CSS Animations & Gradients
+- **Authentication**: Flask-Session for server-side session management
 
-2. Set up MySQL database:
-   - Create database named "uo"
-   - Run the SQL commands in `database_setup.sql`
+## 🚀 Getting Started
 
-3. Update database credentials in `app.py` if needed
+### Prerequisites
 
-4. Run the application:
-   ```
-   python app.py
-   ```
+- Python 3.x
+- `pip` for package installation
 
-## Usage
+### Installation & Setup
 
-- Register a new account or login
-- Take quizzes from the dashboard
-- View your results and compare with others on the leaderboard
-- Each user's best score is tracked for fair competition
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Divyasree-palanisamy/Fullstack_quiz-application.git
+    cd Fullstack_quiz-application
+    ```
 
-## Tech Stack
+2.  **Install Python dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-- Backend: Flask (Python)
-- Database: MySQL
-- Frontend: HTML, CSS, JavaScript, Bootstrap
-- Authentication: Session-based
+3.  **Set up the database:**
+    The application is configured to use SQLite, which requires no special setup. The database file (`database.sql`) will be created automatically. To initialize the schema and add sample data, run:
+    ```bash
+    python database_setup.py
+    python add_sample_data.py
+    ```
 
-## Project Structure
+4.  **Run the application:**
+    ```bash
+    python run.py
+    ```
+    The application will be available at `http://127.0.0.1:5000`.
+
+## 📂 Project Structure
 
 ```
-MERN_STACK/
-├── app.py              # Main Flask application
+.
+├── app.py              # Main Flask application logic
+├── run.py              # Entry point to run the application
 ├── requirements.txt    # Python dependencies
-├── database_setup.sql  # Database schema
-├── templates/          # HTML templates
-├── static/            # CSS, JS, and assets
-└── README.md          # This file
+├── database.sql        # SQLite database file (auto-generated)
+├── database_setup.sql  # SQL schema for the database
+├── add_sample_data.py  # Script to populate the database with sample data
+├── templates/          # HTML templates for different pages
+│   ├── base.html
+│   ├── login.html
+│   ├── register.html
+│   └── ...
+└── static/             # Static assets
+    ├── css/style.css
+    ├── js/quiz.js
+    └── sounds/
 ```
 
 The app is ready to run after setting up the database and installing dependencies. 

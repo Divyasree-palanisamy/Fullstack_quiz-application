@@ -3,192 +3,353 @@
 {% block title %}Dashboard - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">
-                <i class="fas fa-tachometer-alt me-2"></i>Welcome, {{ user.username }}!
-            </h1>
-            <a href="{{ url_for('quiz') }}" class="btn btn-primary">
-                <i class="fas fa-play me-2"></i>Take Quiz
-            </a>
-        </div>
-    </div>
+<style>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a237e;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dashboard-header .dashboard-btn {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .dashboard-header .dashboard-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: #fff;
+    }
+
+    .dashboard-stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-stat-card {
+        flex: 1 1 200px;
+        min-width: 180px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .dashboard-stat-card.bg-success {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .dashboard-stat-card.bg-warning {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .dashboard-stat-card.bg-info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .dashboard-stat-card h4 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .dashboard-stat-card p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .dashboard-stat-card i {
+        font-size: 2rem;
+        opacity: 0.8;
+    }
+
+    .dashboard-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .dashboard-card-header {
+        background: #e3f0ff;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #b3c6e6;
+    }
+
+    .dashboard-card-header h5 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a237e;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dashboard-card-body {
+        padding: 1.5rem;
+    }
+
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    .dashboard-table th,
+    .dashboard-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e3f0ff;
+        text-align: left;
+    }
+
+    .dashboard-table th {
+        background: #f5faff;
+        color: #1a237e;
+        font-weight: 700;
+    }
+
+    .dashboard-table tr:hover {
+        background: #f5faff;
+    }
+
+    .dashboard-badge {
+        display: inline-block;
+        padding: 0.25em 0.75em;
+        border-radius: 12px;
+        font-size: 0.95em;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .dashboard-badge.bg-success {
+        background: #43e97b;
+    }
+
+    .dashboard-badge.bg-warning {
+        background: #ffb300;
+        color: #333;
+    }
+
+    .dashboard-badge.bg-danger {
+        background: #fa709a;
+    }
+
+    .dashboard-btn-outline {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: #fff;
+        color: #667eea;
+        border: 2px solid #667eea;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .dashboard-btn-outline:hover {
+        background: #e3f0ff;
+        color: #3f51b5;
+    }
+
+    .dashboard-empty {
+        text-align: center;
+        padding: 2rem 0;
+        color: #888;
+    }
+
+    .dashboard-empty i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .dashboard-quick-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .dashboard-quick-col {
+        flex: 1 1 200px;
+        min-width: 180px;
+    }
+
+    @media (max-width: 900px) {
+
+        .dashboard-stats-row,
+        .dashboard-quick-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    }
+</style>
+<div class="dashboard-header">
+    <h1><i class="fas fa-tachometer-alt"></i>Welcome, {{ user.username }}!</h1>
+    <a href="{{ url_for('quiz') }}" class="dashboard-btn">
+        <i class="fas fa-play"></i>Take Quiz
+    </a>
 </div>
 
 <!-- Stats Cards -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">{{ recent_results|length }}</h4>
-                        <p class="card-text">Quizzes Taken</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-clipboard-list fa-2x"></i>
-                    </div>
-                </div>
-            </div>
+<div class="dashboard-stats-row">
+    <div class="dashboard-stat-card">
+        <div>
+            <h4>{{ recent_results|length }}</h4>
+            <p>Quizzes Taken</p>
         </div>
+        <i class="fas fa-clipboard-list"></i>
     </div>
-
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">
-                            {% if recent_results %}
-                            {{ "%.1f"|format((recent_results|map(attribute='score')|sum /
-                            recent_results|map(attribute='total_questions')|sum * 100)|round(1)) }}%
-                            {% else %}
-                            0%
-                            {% endif %}
-                        </h4>
-                        <p class="card-text">Average Score</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-chart-line fa-2x"></i>
-                    </div>
-                </div>
-            </div>
+    <div class="dashboard-stat-card bg-success">
+        <div>
+            <h4>
+                {% if recent_results %}
+                {{ "%.1f"|format((recent_results|map(attribute='score')|sum /
+                recent_results|map(attribute='total_questions')|sum * 100)|round(1)) }}%
+                {% else %}
+                0%
+                {% endif %}
+            </h4>
+            <p>Average Score</p>
         </div>
+        <i class="fas fa-chart-line"></i>
     </div>
-
-    <div class="col-md-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">
-                            {% if recent_results %}
-                            {{ recent_results|map(attribute='score')|max }}
-                            {% else %}
-                            0
-                            {% endif %}
-                        </h4>
-                        <p class="card-text">Best Score</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-trophy fa-2x"></i>
-                    </div>
-                </div>
-            </div>
+    <div class="dashboard-stat-card bg-warning">
+        <div>
+            <h4>
+                {% if recent_results %}
+                {{ recent_results|map(attribute='score')|max }}
+                {% else %}
+                0
+                {% endif %}
+            </h4>
+            <p>Best Score</p>
         </div>
+        <i class="fas fa-trophy"></i>
     </div>
-
-    <div class="col-md-3">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">
-                            {% if recent_results %}
-                            {{ (recent_results|map(attribute='time_taken')|sum / 60)|round(1) }}
-                            {% else %}
-                            0
-                            {% endif %}
-                        </h4>
-                        <p class="card-text">Total Time (min)</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-clock fa-2x"></i>
-                    </div>
-                </div>
-            </div>
+    <div class="dashboard-stat-card bg-info">
+        <div>
+            <h4>
+                {% if recent_results %}
+                {{ (recent_results|map(attribute='time_taken')|sum / 60)|round(1) }}
+                {% else %}
+                0
+                {% endif %}
+            </h4>
+            <p>Total Time (min)</p>
         </div>
+        <i class="fas fa-clock"></i>
     </div>
 </div>
 
 <!-- Recent Results -->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-history me-2"></i>Recent Quiz Results
-                </h5>
-            </div>
-            <div class="card-body">
-                {% if recent_results %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Score</th>
-                                <th>Percentage</th>
-                                <th>Time Taken</th>
-                                <th>Quiz Type</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for result in recent_results %}
-                            <tr>
-                                <td>{{ result.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                                <td>{{ result.score }}/{{ result.total_questions }}</td>
-                                <td>
-                                    <span
-                                        class="badge bg-{{ 'success' if (result.score / result.total_questions * 100) >= 70 else 'warning' if (result.score / result.total_questions * 100) >= 50 else 'danger' }}">
-                                        {{ "%.1f"|format(result.score / result.total_questions * 100) }}%
-                                    </span>
-                                </td>
-                                <td>{{ result.time_taken }}s</td>
-                                <td>{{ result.quiz_type.title() }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-center mt-3">
-                    <a href="{{ url_for('results') }}" class="btn btn-outline-primary">
-                        <i class="fas fa-list me-2"></i>View All Results
-                    </a>
-                </div>
-                {% else %}
-                <div class="text-center py-4">
-                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">No quiz results yet</h5>
-                    <p class="text-muted">Take your first quiz to see your results here!</p>
-                    <a href="{{ url_for('quiz') }}" class="btn btn-primary">
-                        <i class="fas fa-play me-2"></i>Take Your First Quiz
-                    </a>
-                </div>
-                {% endif %}
-            </div>
+<div class="dashboard-card">
+    <div class="dashboard-card-header">
+        <h5><i class="fas fa-history"></i>Recent Quiz Results</h5>
+    </div>
+    <div class="dashboard-card-body">
+        {% if recent_results %}
+        <div style="overflow-x:auto;">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Time Taken</th>
+                        <th>Quiz Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in recent_results %}
+                    <tr>
+                        <td>{{ result.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ result.score }}/{{ result.total_questions }}</td>
+                        <td>
+                            <span
+                                class="dashboard-badge bg-{{ 'success' if (result.score / result.total_questions * 100) >= 70 else 'warning' if (result.score / result.total_questions * 100) >= 50 else 'danger' }}">
+                                {{ "%.1f"|format(result.score / result.total_questions * 100) }}%
+                            </span>
+                        </td>
+                        <td>{{ result.time_taken }}s</td>
+                        <td>{{ result.quiz_type.title() }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        <div style="text-align:center; margin-top:1.5rem;">
+            <a href="{{ url_for('results') }}" class="dashboard-btn-outline">
+                <i class="fas fa-list"></i>View All Results
+            </a>
+        </div>
+        {% else %}
+        <div class="dashboard-empty">
+            <i class="fas fa-clipboard-list"></i>
+            <h5>No quiz results yet</h5>
+            <p>Take your first quiz to see your results here!</p>
+            <a href="{{ url_for('quiz') }}" class="dashboard-btn">
+                <i class="fas fa-play"></i>Take Your First Quiz
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
 
 <!-- Quick Actions -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-bolt me-2"></i>Quick Actions
-                </h5>
+<div class="dashboard-card">
+    <div class="dashboard-card-header">
+        <h5><i class="fas fa-bolt"></i>Quick Actions</h5>
+    </div>
+    <div class="dashboard-card-body">
+        <div class="dashboard-quick-row">
+            <div class="dashboard-quick-col">
+                <a href="{{ url_for('quiz') }}" class="dashboard-btn w-100">
+                    <i class="fas fa-play"></i>Take New Quiz
+                </a>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <a href="{{ url_for('quiz') }}" class="btn btn-primary w-100 mb-2">
-                            <i class="fas fa-play me-2"></i>Take New Quiz
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ url_for('results') }}" class="btn btn-outline-primary w-100 mb-2">
-                            <i class="fas fa-chart-bar me-2"></i>View All Results
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ url_for('leaderboard') }}" class="btn btn-outline-success w-100 mb-2">
-                            <i class="fas fa-trophy me-2"></i>Leaderboard
-                        </a>
-                    </div>
-                </div>
+            <div class="dashboard-quick-col">
+                <a href="{{ url_for('results') }}" class="dashboard-btn-outline w-100">
+                    <i class="fas fa-chart-bar"></i>View All Results
+                </a>
+            </div>
+            <div class="dashboard-quick-col">
+                <a href="{{ url_for('leaderboard') }}" class="dashboard-btn-outline w-100">
+                    <i class="fas fa-trophy"></i>Leaderboard
+                </a>
             </div>
         </div>
     </div>

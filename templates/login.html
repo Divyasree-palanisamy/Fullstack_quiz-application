@@ -3,64 +3,201 @@
 {% block title %}Login - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-background">
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
+<style>
+    .login-page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+    }
+
+    .login-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        padding: 2.5rem 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .login-header .icon {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1a237e;
+    }
+
+    .login-subtitle {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+
+    .login-form {
+        margin-bottom: 1.5rem;
+    }
+
+    .login-form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .login-label {
+        display: block;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: #f5faff;
+        border-radius: 12px;
+        border: 2px solid #b3c6e6;
+        padding: 0.5rem 1rem;
+    }
+
+    .login-input-wrapper i {
+        color: #667eea;
+        margin-right: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .login-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1rem;
+        color: #1a237e;
+        width: 100%;
+        padding: 0.5rem 0;
+    }
+
+    .login-btn {
+        width: 100%;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .login-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: #fff;
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .login-divider {
+        position: relative;
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+
+    .login-divider span {
+        background: #fff;
+        padding: 0 1rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        margin-top: 0.5rem;
+    }
+
+    .login-link:hover {
+        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    @media (max-width: 500px) {
+        .login-card {
+            padding: 1.5rem 0.5rem;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+<div class="login-page-wrapper">
+    <form method="POST" class="login-card">
+        <div class="login-header">
+            <div class="icon"><i class="fas fa-sign-in-alt"></i></div>
+            <div class="login-title">Welcome Back</div>
+            <div class="login-subtitle">Sign in to continue your learning journey</div>
         </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center min-vh-100">
-        <div class="col-md-6 col-lg-4">
-            <div class="auth-card">
-                <div class="auth-card-header">
-                    <div class="auth-icon-container">
-                        <i class="fas fa-sign-in-alt auth-icon"></i>
-                    </div>
-                    <h2 class="auth-title">Welcome Back</h2>
-                    <p class="auth-subtitle">Sign in to continue your learning journey</p>
-                </div>
-
-                <div class="auth-card-body">
-                    <form method="POST" class="auth-form">
-                        <div class="form-floating mb-4">
-                            <input type="text" class="form-control auth-input" id="username" name="username"
-                                placeholder="Username" required>
-                            <label for="username" class="auth-label">
-                                <i class="fas fa-user me-2"></i>Username
-                            </label>
-                        </div>
-
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control auth-input" id="password" name="password"
-                                placeholder="Password" required>
-                            <label for="password" class="auth-label">
-                                <i class="fas fa-lock me-2"></i>Password
-                            </label>
-                        </div>
-
-                        <div class="d-grid mb-4">
-                            <button type="submit" class="btn auth-btn">
-                                <span class="btn-text">Sign In</span>
-                                <i class="fas fa-arrow-right btn-icon"></i>
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="auth-footer">
-                        <div class="divider">
-                            <span>New to Quiz Master?</span>
-                        </div>
-                        <a href="{{ url_for('register') }}" class="auth-link">
-                            <i class="fas fa-user-plus me-2"></i>Create Account
-                        </a>
-                    </div>
+        <div class="login-form">
+            <div class="login-form-group">
+                <label for="username" class="login-label">Username</label>
+                <div class="login-input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="login-input" id="username" name="username" placeholder="Username"
+                        required>
                 </div>
             </div>
+            <div class="login-form-group">
+                <label for="password" class="login-label">Password</label>
+                <div class="login-input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="login-input" id="password" name="password" placeholder="Password"
+                        required>
+                </div>
+            </div>
+            <button type="submit" class="login-btn">
+                <span>Sign In</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-    </div>
+        <div class="login-footer">
+            <div class="login-divider">
+                <span>New to Quiz Master?</span>
+            </div>
+            <a href="{{ url_for('register') }}" class="login-link">
+                <i class="fas fa-user-plus"></i> Create Account
+            </a>
+        </div>
+    </form>
 </div>
 {% endblock %}

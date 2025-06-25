@@ -3,72 +3,208 @@
 {% block title %}Register - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-background">
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
+<style>
+    .register-page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+    }
+
+    .register-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        padding: 2.5rem 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .register-header .icon {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .register-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1a237e;
+    }
+
+    .register-subtitle {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+
+    .register-form {
+        margin-bottom: 1.5rem;
+    }
+
+    .register-form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .register-label {
+        display: block;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .register-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: #f5faff;
+        border-radius: 12px;
+        border: 2px solid #b3c6e6;
+        padding: 0.5rem 1rem;
+    }
+
+    .register-input-wrapper i {
+        color: #667eea;
+        margin-right: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .register-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1rem;
+        color: #1a237e;
+        width: 100%;
+        padding: 0.5rem 0;
+    }
+
+    .register-btn {
+        width: 100%;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .register-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: #fff;
+    }
+
+    .register-footer {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .register-divider {
+        position: relative;
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+
+    .register-divider span {
+        background: #fff;
+        padding: 0 1rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .register-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        margin-top: 0.5rem;
+    }
+
+    .register-link:hover {
+        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    @media (max-width: 500px) {
+        .register-card {
+            padding: 1.5rem 0.5rem;
+        }
+
+        .register-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+<div class="register-page-wrapper">
+    <form method="POST" class="register-card">
+        <div class="register-header">
+            <div class="icon"><i class="fas fa-user-plus"></i></div>
+            <div class="register-title">Join Quiz Master</div>
+            <div class="register-subtitle">Create your account and start learning</div>
         </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center min-vh-100">
-        <div class="col-md-6 col-lg-4">
-            <div class="auth-card">
-                <div class="auth-card-header">
-                    <div class="auth-icon-container">
-                        <i class="fas fa-user-plus auth-icon"></i>
-                    </div>
-                    <h2 class="auth-title">Join Quiz Master</h2>
-                    <p class="auth-subtitle">Create your account and start learning</p>
-                </div>
-
-                <div class="auth-card-body">
-                    <form method="POST" class="auth-form">
-                        <div class="form-floating mb-4">
-                            <input type="text" class="form-control auth-input" id="username" name="username"
-                                placeholder="Username" required>
-                            <label for="username" class="auth-label">
-                                <i class="fas fa-user me-2"></i>Username
-                            </label>
-                        </div>
-
-                        <div class="form-floating mb-4">
-                            <input type="email" class="form-control auth-input" id="email" name="email"
-                                placeholder="Email" required>
-                            <label for="email" class="auth-label">
-                                <i class="fas fa-envelope me-2"></i>Email
-                            </label>
-                        </div>
-
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control auth-input" id="password" name="password"
-                                placeholder="Password" required>
-                            <label for="password" class="auth-label">
-                                <i class="fas fa-lock me-2"></i>Password
-                            </label>
-                        </div>
-
-                        <div class="d-grid mb-4">
-                            <button type="submit" class="btn auth-btn">
-                                <span class="btn-text">Create Account</span>
-                                <i class="fas fa-arrow-right btn-icon"></i>
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="auth-footer">
-                        <div class="divider">
-                            <span>Already have an account?</span>
-                        </div>
-                        <a href="{{ url_for('login') }}" class="auth-link">
-                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                        </a>
-                    </div>
+        <div class="register-form">
+            <div class="register-form-group">
+                <label for="username" class="register-label">Username</label>
+                <div class="register-input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="register-input" id="username" name="username" placeholder="Username"
+                        required>
                 </div>
             </div>
+            <div class="register-form-group">
+                <label for="email" class="register-label">Email</label>
+                <div class="register-input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" class="register-input" id="email" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="register-form-group">
+                <label for="password" class="register-label">Password</label>
+                <div class="register-input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="register-input" id="password" name="password" placeholder="Password"
+                        required>
+                </div>
+            </div>
+            <button type="submit" class="register-btn">
+                <span>Create Account</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-    </div>
+        <div class="register-footer">
+            <div class="register-divider">
+                <span>Already have an account?</span>
+            </div>
+            <a href="{{ url_for('login') }}" class="register-link">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </a>
+        </div>
+    </form>
 </div>
 {% endblock %}

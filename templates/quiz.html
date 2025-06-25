@@ -3,128 +3,265 @@
 {% block title %}Take Quiz - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="quiz-page-container">
-    <!-- Background Animation -->
-    <div class="quiz-background">
-        <div class="quiz-particles">
-            <div class="particle particle-1"></div>
-            <div class="particle particle-2"></div>
-            <div class="particle particle-3"></div>
-            <div class="particle particle-4"></div>
-            <div class="particle particle-5"></div>
-        </div>
-    </div>
+<style>
+    .quiz-page-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 80vh;
+        background: none;
+    }
 
-    <div class="row justify-content-center">
-        <div class="col-lg-10 col-xl-8">
-            <div class="quiz-card">
-                <!-- Quiz Header -->
-                <div class="quiz-header">
-                    <div class="quiz-header-content">
-                        <div class="quiz-logo">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <div class="quiz-title-section">
-                            <h2 class="quiz-title">React Knowledge Quiz</h2>
-                            <p class="quiz-subtitle">Test your React.js skills with interactive questions</p>
-                        </div>
-                    </div>
+    .quiz-main {
+        width: 100%;
+        max-width: 700px;
+        margin: 40px 0;
+    }
 
-                    <!-- Progress Section -->
-                    <div class="quiz-progress-section">
-                        <div class="progress-container">
-                            <div class="progress-info">
-                                <span class="progress-text">Progress</span>
-                                <span class="progress-percentage" id="progressText">0%</span>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-bg">
-                                    <div id="progressBar" class="progress-bar-fill"></div>
-                                </div>
-                            </div>
-                        </div>
+    .quiz-card {
+        background: #e3f0ff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .quiz-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        padding: 1.5rem 2rem;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .quiz-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quiz-body {
+        padding: 2rem;
+    }
+
+    .progress {
+        height: 25px;
+        border-radius: 10px;
+        background: #b3c6e6;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .progress-bar {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        border-radius: 10px;
+        height: 100%;
+        transition: width 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1a237e;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .quiz-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .timer-container {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        color: #1a237e;
+        font-size: 1.1rem;
+    }
+
+    .timer-container i {
+        color: #ffb300;
+        margin-right: 0.5rem;
+    }
+
+    .question-counter {
+        font-weight: 600;
+        color: #1a237e;
+        font-size: 1.1rem;
+    }
+
+    .question-section {
+        margin-bottom: 2rem;
+    }
+
+    #question {
+        font-weight: 700;
+        color: #1a237e;
+        font-size: 1.2rem;
+    }
+
+    .options-container {
+        margin-bottom: 2rem;
+    }
+
+    .option-btn {
+        background: #f5faff;
+        color: #1a237e;
+        border: 2px solid #b3c6e6;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin: 0.5rem 0;
+        text-align: left;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-weight: 500;
+        width: 100%;
+        display: block;
+    }
+
+    .option-btn:hover {
+        border-color: #5c6bc0;
+        background: #e3f0ff;
+        color: #283593;
+        transform: translateX(5px);
+    }
+
+    .option-btn.correct {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .option-btn.incorrect {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .option-btn.selected {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .quiz-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .quiz-btn {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        font-size: 1rem;
+        cursor: pointer;
+        background: #fff;
+        color: #1a237e;
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quiz-btn.primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+    }
+
+    .quiz-btn.secondary {
+        background: #e3f0ff;
+        color: #1a237e;
+        border: 2px solid #b3c6e6;
+    }
+
+    .quiz-btn.warning {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: #fff;
+    }
+
+    .quiz-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mt-4 {
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+        .quiz-main {
+            max-width: 100%;
+            margin: 10px 0;
+        }
+
+        .quiz-body {
+            padding: 1rem;
+        }
+
+        .quiz-header {
+            padding: 1rem;
+        }
+    }
+</style>
+<div class="quiz-page-wrapper">
+    <div class="quiz-main">
+        <div class="quiz-card">
+            <div class="quiz-header">
+                <h3><i class="fas fa-question-circle"></i>Quiz Master</h3>
+            </div>
+            <div class="quiz-body">
+                <div class="progress">
+                    <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%">
+                        <span id="progressText">0%</span>
                     </div>
                 </div>
-
-                <!-- Quiz Body -->
-                <div class="quiz-body">
-                    <!-- Timer and Question Counter -->
-                    <div class="quiz-stats">
-                        <div class="timer-card">
-                            <div class="timer-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="timer-content">
-                                <span class="timer-label">Time Left</span>
-                                <span id="timer" class="timer-value">60</span>
-                                <span class="timer-unit">sec</span>
-                            </div>
-                        </div>
-
-                        <div class="question-counter-card">
-                            <div class="counter-icon">
-                                <i class="fas fa-list-ol"></i>
-                            </div>
-                            <div class="counter-content">
-                                <span class="counter-label">Question</span>
-                                <span class="counter-value">
-                                    <span id="currentQuestion">1</span>
-                                    <span class="counter-separator">/</span>
-                                    <span id="totalQuestions">10</span>
-                                </span>
-                            </div>
-                        </div>
+                <div class="quiz-flex">
+                    <div class="timer-container">
+                        <i class="fas fa-clock"></i>
+                        <span id="timer">60</span> seconds
                     </div>
-
-                    <!-- Question Section -->
-                    <div class="question-container">
-                        <div class="question-header">
-                            <div class="question-number">
-                                <span id="questionNumber">1</span>
-                            </div>
-                            <div class="question-text">
-                                <h3 id="question" class="question-title">Loading question...</h3>
-                            </div>
-                        </div>
-
-                        <!-- Options Container -->
-                        <div id="options" class="options-grid">
-                            <!-- Options will be loaded here -->
-                        </div>
+                    <div class="question-counter">
+                        Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
                     </div>
-
-                    <!-- Navigation -->
-                    <div class="quiz-navigation">
-                        <button id="prevBtn" class="nav-btn nav-btn-prev" style="display: none;">
-                            <i class="fas fa-chevron-left"></i>
-                            <span>Previous</span>
-                        </button>
-
-                        <div class="nav-center">
-                            <div class="score-display" id="score" style="display: none;">
-                                <!-- Score will be displayed here -->
-                            </div>
-                        </div>
-
-                        <button id="nextBtn" class="nav-btn nav-btn-next">
-                            <span>Next</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-
-                    <!-- Reset Section -->
-                    <div class="quiz-reset-section">
-                        <button id="resetBtn" class="reset-btn" style="display: none;">
-                            <i class="fas fa-redo-alt"></i>
-                            <span>Take Another Quiz</span>
-                        </button>
-                    </div>
+                </div>
+                <div class="question-section">
+                    <h4 id="question">Loading question...</h4>
+                </div>
+                <div id="options" class="options-container">
+                    <!-- Options will be loaded here -->
+                </div>
+                <div class="quiz-nav">
+                    <button id="prevBtn" class="quiz-btn secondary" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>Previous
+                    </button>
+                    <button id="nextBtn" class="quiz-btn primary">
+                        Next<i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div id="score" class="mt-4 text-center" style="display: none;"></div>
+                <div class="text-center mt-4">
+                    <button id="resetBtn" class="quiz-btn warning" style="display: none;">
+                        <i class="fas fa-redo"></i>Take Another Quiz
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Audio Elements -->
 <audio id="correctSound" src="{{ url_for('static', filename='sounds/correct.mp3') }}"></audio>
 <audio id="wrongSound" src="{{ url_for('static', filename='sounds/wrong.mp3') }}"></audio>

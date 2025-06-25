@@ -3,69 +3,248 @@
 {% block title %}My Results - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">
-                <i class="fas fa-chart-bar me-2"></i>My Quiz Results
-            </h1>
-            <a href="{{ url_for('quiz') }}" class="btn btn-primary">
-                <i class="fas fa-play me-2"></i>Take New Quiz
-            </a>
-        </div>
-    </div>
-</div>
+<style>
+    .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
 
+    .results-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a237e;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .results-header .results-btn {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .results-header .results-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: #fff;
+    }
+
+    .results-stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .results-stat-card {
+        flex: 1 1 200px;
+        min-width: 180px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        padding: 1.5rem 1rem;
+        text-align: center;
+    }
+
+    .results-stat-card.bg-success {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .results-stat-card.bg-warning {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .results-stat-card.bg-info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .results-stat-card h4 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .results-stat-card p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .results-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .results-card-header {
+        background: #e3f0ff;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #b3c6e6;
+    }
+
+    .results-card-header h5 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a237e;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .results-card-body {
+        padding: 1.5rem;
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    .results-table th,
+    .results-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e3f0ff;
+        text-align: left;
+    }
+
+    .results-table th {
+        background: #f5faff;
+        color: #1a237e;
+        font-weight: 700;
+    }
+
+    .results-table tr:hover {
+        background: #f5faff;
+    }
+
+    .results-badge {
+        display: inline-block;
+        padding: 0.25em 0.75em;
+        border-radius: 12px;
+        font-size: 0.95em;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .results-badge.bg-success {
+        background: #43e97b;
+    }
+
+    .results-badge.bg-warning {
+        background: #ffb300;
+        color: #333;
+    }
+
+    .results-badge.bg-danger {
+        background: #fa709a;
+    }
+
+    .results-btn-outline {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: #fff;
+        color: #667eea;
+        border: 2px solid #667eea;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .results-btn-outline:hover {
+        background: #e3f0ff;
+        color: #3f51b5;
+    }
+
+    .results-empty {
+        text-align: center;
+        padding: 2rem 0;
+        color: #888;
+    }
+
+    .results-empty i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .results-quick-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .results-quick-col {
+        flex: 1 1 200px;
+        min-width: 180px;
+    }
+
+    @media (max-width: 900px) {
+
+        .results-stats-row,
+        .results-quick-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    }
+</style>
+<div class="results-header">
+    <h1><i class="fas fa-chart-bar"></i>My Quiz Results</h1>
+    <a href="{{ url_for('quiz') }}" class="results-btn">
+        <i class="fas fa-play"></i>Take New Quiz
+    </a>
+</div>
 {% if results %}
 <!-- Results Summary -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h4>{{ results|length }}</h4>
-                <p class="mb-0">Total Quizzes</p>
-            </div>
-        </div>
+<div class="results-stats-row">
+    <div class="results-stat-card">
+        <h4>{{ results|length }}</h4>
+        <p>Total Quizzes</p>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <h4>
-                    {{ "%.1f"|format((results|map(attribute='score')|sum / results|map(attribute='total_questions')|sum
-                    * 100)|round(1)) }}%
-                </h4>
-                <p class="mb-0">Average Score</p>
-            </div>
-        </div>
+    <div class="results-stat-card bg-success">
+        <h4>
+            {{ "%.1f"|format((results|map(attribute='score')|sum / results|map(attribute='total_questions')|sum *
+            100)|round(1)) }}%
+        </h4>
+        <p>Average Score</p>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body text-center">
-                <h4>{{ results|map(attribute='score')|max }}</h4>
-                <p class="mb-0">Best Score</p>
-            </div>
-        </div>
+    <div class="results-stat-card bg-warning">
+        <h4>{{ results|map(attribute='score')|max }}</h4>
+        <p>Best Score</p>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-info text-white">
-            <div class="card-body text-center">
-                <h4>{{ (results|map(attribute='time_taken')|sum / 60)|round(1) }}</h4>
-                <p class="mb-0">Total Time (min)</p>
-            </div>
-        </div>
+    <div class="results-stat-card bg-info">
+        <h4>{{ (results|map(attribute='time_taken')|sum / 60)|round(1) }}</h4>
+        <p>Total Time (min)</p>
     </div>
 </div>
-
 <!-- Results Table -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title mb-0">
-            <i class="fas fa-list me-2"></i>Quiz History
-        </h5>
+<div class="results-card">
+    <div class="results-card-header">
+        <h5><i class="fas fa-list"></i>Quiz History</h5>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
+    <div class="results-card-body">
+        <div style="overflow-x:auto;">
+            <table class="results-table">
                 <thead>
                     <tr>
                         <th>Date & Time</th>
@@ -84,7 +263,7 @@
                         <td>
                             {% set percentage = (result.score / result.total_questions * 100)|round(1) %}
                             <span
-                                class="badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
+                                class="results-badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
                                 {{ percentage }}%
                             </span>
                         </td>
@@ -92,13 +271,13 @@
                         <td>{{ result.quiz_type.title() }}</td>
                         <td>
                             {% if percentage >= 90 %}
-                            <i class="fas fa-star text-warning"></i> Excellent
+                            <i class="fas fa-star" style="color:#ffb300;"></i> Excellent
                             {% elif percentage >= 70 %}
-                            <i class="fas fa-thumbs-up text-success"></i> Good
+                            <i class="fas fa-thumbs-up" style="color:#43e97b;"></i> Good
                             {% elif percentage >= 50 %}
-                            <i class="fas fa-meh text-warning"></i> Average
+                            <i class="fas fa-meh" style="color:#ffb300;"></i> Average
                             {% else %}
-                            <i class="fas fa-thumbs-down text-danger"></i> Needs Improvement
+                            <i class="fas fa-thumbs-down" style="color:#fa709a;"></i> Needs Improvement
                             {% endif %}
                         </td>
                     </tr>
@@ -108,68 +287,49 @@
         </div>
     </div>
 </div>
-
 <!-- Performance Chart -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-chart-line me-2"></i>Performance Trend
-                </h5>
-            </div>
-            <div class="card-body">
-                <canvas id="performanceChart" width="400" height="200"></canvas>
-            </div>
-        </div>
+<div class="results-card">
+    <div class="results-card-header">
+        <h5><i class="fas fa-chart-line"></i>Performance Trend</h5>
+    </div>
+    <div class="results-card-body">
+        <canvas id="performanceChart" width="400" height="200"></canvas>
     </div>
 </div>
-
 {% else %}
 <!-- No Results -->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body text-center py-5">
-                <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
-                <h3 class="text-muted">No Quiz Results Yet</h3>
-                <p class="text-muted mb-4">You haven't taken any quizzes yet. Start your learning journey today!</p>
-                <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-play me-2"></i>Take Your First Quiz
-                </a>
-            </div>
-        </div>
+<div class="results-card">
+    <div class="results-card-body results-empty">
+        <i class="fas fa-clipboard-list"></i>
+        <h3>No Quiz Results Yet</h3>
+        <p>You haven't taken any quizzes yet. Start your learning journey today!</p>
+        <a href="{{ url_for('quiz') }}" class="results-btn">
+            <i class="fas fa-play"></i>Take Your First Quiz
+        </a>
     </div>
 </div>
 {% endif %}
-
 <!-- Quick Actions -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-bolt me-2"></i>Quick Actions
-                </h5>
+<div class="results-card">
+    <div class="results-card-header">
+        <h5><i class="fas fa-bolt"></i>Quick Actions</h5>
+    </div>
+    <div class="results-card-body">
+        <div class="results-quick-row">
+            <div class="results-quick-col">
+                <a href="{{ url_for('quiz') }}" class="results-btn w-100">
+                    <i class="fas fa-play"></i>Take New Quiz
+                </a>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <a href="{{ url_for('quiz') }}" class="btn btn-primary w-100 mb-2">
-                            <i class="fas fa-play me-2"></i>Take New Quiz
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary w-100 mb-2">
-                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ url_for('leaderboard') }}" class="btn btn-outline-success w-100 mb-2">
-                            <i class="fas fa-trophy me-2"></i>Leaderboard
-                        </a>
-                    </div>
-                </div>
+            <div class="results-quick-col">
+                <a href="{{ url_for('dashboard') }}" class="results-btn-outline w-100">
+                    <i class="fas fa-tachometer-alt"></i>Dashboard
+                </a>
+            </div>
+            <div class="results-quick-col">
+                <a href="{{ url_for('leaderboard') }}" class="results-btn-outline w-100">
+                    <i class="fas fa-trophy"></i>Leaderboard
+                </a>
             </div>
         </div>
     </div>

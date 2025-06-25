@@ -3,38 +3,277 @@
 {% block title %}Home - Quiz Master{% endblock %}
 
 {% block content %}
+<style>
+    .hero-section {
+        text-align: center;
+        padding: 4rem 0 3rem 0;
+        background: linear-gradient(135deg, #e3f0ff 0%, #f5faff 100%);
+    }
+
+    .hero-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .hero-col {
+        flex: 1 1 350px;
+        min-width: 300px;
+        max-width: 600px;
+    }
+
+    .hero-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #3f51b5;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .hero-section p.lead {
+        font-size: 1.25rem;
+        color: #333;
+        margin-bottom: 2rem;
+    }
+
+    .hero-btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .hero-btn {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        text-decoration: none;
+    }
+
+    .hero-btn.outline {
+        background: #fff;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .hero-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .hero-btn.outline:hover {
+        background: #e3f0ff;
+        color: #3f51b5;
+    }
+
+    .features-section {
+        padding: 4rem 0 3rem 0;
+        background: #fff;
+    }
+
+    .features-section h2 {
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #1a237e;
+        font-weight: 700;
+    }
+
+    .features-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+    }
+
+    .feature-col {
+        flex: 1 1 250px;
+        min-width: 250px;
+        max-width: 350px;
+    }
+
+    .feature-card {
+        background: #f5faff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feature-icon {
+        margin-bottom: 1rem;
+    }
+
+    .feature-icon .fa-chart-line {
+        color: #3f51b5;
+    }
+
+    .feature-icon .fa-trophy {
+        color: #ffb300;
+    }
+
+    .feature-icon .fa-clock {
+        color: #43e97b;
+    }
+
+    .feature-card h5 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1a237e;
+    }
+
+    .feature-card p {
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .stats-section {
+        padding: 3rem 0;
+        background: #f5f7fa;
+    }
+
+    .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .stat-col {
+        flex: 1 1 180px;
+        min-width: 150px;
+        max-width: 220px;
+        text-align: center;
+    }
+
+    .stat-item h3 {
+        color: #3f51b5;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-item p {
+        color: #888;
+        font-size: 1rem;
+    }
+
+    .cta-section {
+        padding: 3rem 0 4rem 0;
+        background: linear-gradient(135deg, #e3f0ff 0%, #f5faff 100%);
+        text-align: center;
+    }
+
+    .cta-section h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a237e;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-section p.lead {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 2rem;
+    }
+
+    .cta-btn {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        text-decoration: none;
+    }
+
+    .cta-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+
+        .hero-row,
+        .features-row,
+        .stats-row {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .hero-col,
+        .feature-col,
+        .stat-col {
+            max-width: 100%;
+        }
+    }
+</style>
 <!-- Hero Section -->
-<div class="hero-section text-center py-5">
-    <div class="row align-items-center">
-        <div class="col-lg-6">
-            <h1 class="display-4 fw-bold text-primary mb-4">
-                <i class="fas fa-brain me-3"></i>Test Your Knowledge
-            </h1>
-            <p class="lead mb-4">
+<div class="hero-section">
+    <div class="hero-row">
+        <div class="hero-col">
+            <h1><i class="fas fa-brain"></i>Test Your Knowledge</h1>
+            <p class="lead">
                 Challenge yourself with our interactive quizzes. Track your progress, compete with others, and improve
                 your skills across various topics.
             </p>
             {% if not session.user_id %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">
-                    <i class="fas fa-user-plus me-2"></i>Get Started
+            <div class="hero-btn-group">
+                <a href="{{ url_for('register') }}" class="hero-btn">
+                    <i class="fas fa-user-plus"></i>Get Started
                 </a>
-                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                <a href="{{ url_for('login') }}" class="hero-btn outline">
+                    <i class="fas fa-sign-in-alt"></i>Login
                 </a>
             </div>
             {% else %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg px-4 me-md-2">
-                    <i class="fas fa-play me-2"></i>Take Quiz
+            <div class="hero-btn-group">
+                <a href="{{ url_for('quiz') }}" class="hero-btn">
+                    <i class="fas fa-play"></i>Take Quiz
                 </a>
-                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-lg px-4">
-                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                <a href="{{ url_for('dashboard') }}" class="hero-btn outline">
+                    <i class="fas fa-tachometer-alt"></i>Dashboard
                 </a>
             </div>
             {% endif %}
         </div>
-        <div class="col-lg-6">
+        <div class="hero-col">
             <div class="hero-image">
                 <i class="fas fa-question-circle" style="font-size: 15rem; color: #e3f2fd;"></i>
             </div>
@@ -43,88 +282,82 @@
 </div>
 
 <!-- Features Section -->
-<div class="features-section py-5">
-    <h2 class="text-center mb-5">Why Choose Quiz Master?</h2>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="fas fa-chart-line fa-3x text-primary"></i>
-                    </div>
-                    <h5 class="card-title">Track Progress</h5>
-                    <p class="card-text">Monitor your performance over time with detailed analytics and progress
-                        tracking.</p>
+<div class="features-section">
+    <h2>Why Choose Quiz Master?</h2>
+    <div class="features-row">
+        <div class="feature-col">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line fa-3x"></i>
                 </div>
+                <h5>Track Progress</h5>
+                <p>Monitor your performance over time with detailed analytics and progress
+                    tracking.</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="fas fa-trophy fa-3x text-warning"></i>
-                    </div>
-                    <h5 class="card-title">Compete & Win</h5>
-                    <p class="card-text">Compete with other users on our leaderboard and strive for the top spot.</p>
+        <div class="feature-col">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy fa-3x"></i>
                 </div>
+                <h5>Compete & Win</h5>
+                <p>Compete with other users on our leaderboard and strive for the top spot.</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="fas fa-clock fa-3x text-success"></i>
-                    </div>
-                    <h5 class="card-title">Timed Challenges</h5>
-                    <p class="card-text">Test your knowledge under pressure with timed quizzes and real-time feedback.
-                    </p>
+        <div class="feature-col">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clock fa-3x"></i>
                 </div>
+                <h5>Timed Challenges</h5>
+                <p>Test your knowledge under pressure with timed quizzes and real-time feedback.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Stats Section -->
-<div class="stats-section py-5 bg-light">
-    <div class="row text-center">
-        <div class="col-md-3">
+<div class="stats-section">
+    <div class="stats-row">
+        <div class="stat-col">
             <div class="stat-item">
-                <h3 class="text-primary fw-bold">1000+</h3>
-                <p class="text-muted">Active Users</p>
+                <h3>1000+</h3>
+                <p>Active Users</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="stat-col">
             <div class="stat-item">
-                <h3 class="text-primary fw-bold">50+</h3>
-                <p class="text-muted">Quiz Categories</p>
+                <h3>50+</h3>
+                <p>Quiz Categories</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="stat-col">
             <div class="stat-item">
-                <h3 class="text-primary fw-bold">10,000+</h3>
-                <p class="text-muted">Quizzes Taken</p>
+                <h3>10,000+</h3>
+                <p>Quizzes Taken</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="stat-col">
             <div class="stat-item">
-                <h3 class="text-primary fw-bold">95%</h3>
-                <p class="text-muted">User Satisfaction</p>
+                <h3>95%</h3>
+                <p>User Satisfaction</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- CTA Section -->
-<div class="cta-section py-5 text-center">
-    <h2 class="mb-4">Ready to Test Your Knowledge?</h2>
-    <p class="lead mb-4">Join thousands of users who are already improving their skills with Quiz Master.</p>
+<div class="cta-section">
+    <h2>Ready to Test Your Knowledge?</h2>
+    <p class="lead">Join thousands of users who are already improving their skills with Quiz Master.</p>
     {% if not session.user_id %}
-    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
-        <i class="fas fa-rocket me-2"></i>Start Your Journey
+    <a href="{{ url_for('register') }}" class="cta-btn">
+        <i class="fas fa-rocket"></i>Start Your Journey
     </a>
     {% else %}
-    <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg">
-        <i class="fas fa-play me-2"></i>Take a Quiz Now
+    <a href="{{ url_for('quiz') }}" class="cta-btn">
+        <i class="fas fa-play"></i>Take a Quiz Now
     </a>
     {% endif %}
 </div>

@@ -3,73 +3,286 @@
 {% block title %}Leaderboard - Quiz Master{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="text-center mb-4">
-            <h1 class="display-4 fw-bold text-primary">
-                <i class="fas fa-trophy me-3"></i>Leaderboard
-            </h1>
-            <p class="lead text-muted">See who's leading the pack in Quiz Master!</p>
-        </div>
-    </div>
-</div>
+<style>
+    .leaderboard-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
+    .leaderboard-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #3f51b5;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .leaderboard-header p {
+        color: #888;
+        font-size: 1.2rem;
+    }
+
+    .podium-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .podium-col {
+        flex: 1 1 200px;
+        min-width: 180px;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .podium-place {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0 auto 1rem auto;
+        background: linear-gradient(135deg, #ffb300 0%, #ffe082 100%);
+        color: #fff;
+        position: relative;
+    }
+
+    .podium-place.secondary {
+        background: linear-gradient(135deg, #bdbdbd 0%, #e0e0e0 100%);
+    }
+
+    .podium-place.danger {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .podium-crown {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #ffb300;
+    }
+
+    .podium-badge {
+        display: inline-block;
+        padding: 0.25em 0.75em;
+        border-radius: 12px;
+        font-size: 0.95em;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .podium-badge.bg-success {
+        background: #43e97b;
+    }
+
+    .podium-badge.bg-warning {
+        background: #ffb300;
+        color: #333;
+    }
+
+    .podium-badge.bg-danger {
+        background: #fa709a;
+    }
+
+    .leaderboard-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .leaderboard-card-header {
+        background: #e3f0ff;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #b3c6e6;
+    }
+
+    .leaderboard-card-header h5 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a237e;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .leaderboard-card-body {
+        padding: 1.5rem;
+    }
+
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e3f0ff;
+        text-align: left;
+    }
+
+    .leaderboard-table th {
+        background: #f5faff;
+        color: #1a237e;
+        font-weight: 700;
+    }
+
+    .leaderboard-table tr:hover {
+        background: #f5faff;
+    }
+
+    .leaderboard-badge {
+        display: inline-block;
+        padding: 0.25em 0.75em;
+        border-radius: 12px;
+        font-size: 0.95em;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .leaderboard-badge.bg-success {
+        background: #43e97b;
+    }
+
+    .leaderboard-badge.bg-warning {
+        background: #ffb300;
+        color: #333;
+    }
+
+    .leaderboard-badge.bg-danger {
+        background: #fa709a;
+    }
+
+    .leaderboard-empty {
+        text-align: center;
+        padding: 2rem 0;
+        color: #888;
+    }
+
+    .leaderboard-empty i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .leaderboard-stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .leaderboard-stat-card {
+        flex: 1 1 200px;
+        min-width: 180px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+        padding: 1.5rem 1rem;
+        text-align: center;
+    }
+
+    .leaderboard-stat-card.bg-success {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .leaderboard-stat-card.bg-warning {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .leaderboard-stat-card h4 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .leaderboard-stat-card p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .leaderboard-howto-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .leaderboard-howto-col {
+        flex: 1 1 200px;
+        min-width: 180px;
+        text-align: center;
+    }
+
+    @media (max-width: 900px) {
+
+        .podium-row,
+        .leaderboard-stats-row,
+        .leaderboard-howto-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .podium-col,
+        .leaderboard-stat-card,
+        .leaderboard-howto-col {
+            max-width: 100%;
+        }
+    }
+</style>
+<div class="leaderboard-header">
+    <h1><i class="fas fa-trophy"></i>Leaderboard</h1>
+    <p>See who's leading the pack in Quiz Master!</p>
+</div>
 {% if top_scores %}
 <!-- Top 3 Podium -->
-<div class="row mb-5">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="text-center mb-4">
-                    <i class="fas fa-crown text-warning me-2"></i>Top Performers
-                </h3>
-                <div class="row justify-content-center">
-                    {% for i in range(3) %}
-                    {% if i < top_scores|length %} {% set score=top_scores[i] %} {% if score[2]> 0 %}
-                        {% set percentage = (score[1] / score[2] * 100)|round(1) %}
-                        {% else %}
-                        {% set percentage = 0 %}
-                        {% endif %}
-                        <div class="col-md-4 text-center">
-                            <div class="position-relative">
-                                {% if i == 0 %}
-                                <div class="position-absolute top-0 start-50 translate-middle">
-                                    <i class="fas fa-crown fa-2x text-warning"></i>
-                                </div>
-                                {% endif %}
-                                <div class="podium-place bg-{{ 'warning' if i == 0 else 'secondary' if i == 1 else 'danger' }} text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                    style="width: 120px; height: 120px; font-size: 2rem; font-weight: bold;">
-                                    {{ i + 1 }}
-                                </div>
-                                <h4 class="fw-bold">{{ score[0] }}</h4>
-                                <p class="mb-1">
-                                    <span
-                                        class="badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }} fs-6">
-                                        {{ percentage }}%
-                                    </span>
-                                </p>
-                                <p class="text-muted mb-1">{{ score[1] }}/{{ score[2] }} correct</p>
-                                <p class="text-muted small">{{ score[3].strftime('%Y-%m-%d') }}</p>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                </div>
+<div class="podium-row">
+    {% for i in range(3) %}
+    {% if i < top_scores|length %} {% set score=top_scores[i] %} {% if score[2]> 0 %}
+        {% set percentage = (score[1] / score[2] * 100)|round(1) %}
+        {% else %}
+        {% set percentage = 0 %}
+        {% endif %}
+        <div class="podium-col">
+            <div class="podium-place{% if i == 1 %} secondary{% elif i == 2 %} danger{% endif %}">
+                {{ i + 1 }}
+                {% if i == 0 %}
+                <span class="podium-crown"><i class="fas fa-crown"></i></span>
+                {% endif %}
             </div>
+            <h4>{{ score[0] }}</h4>
+            <p>
+                <span
+                    class="podium-badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
+                    {{ percentage }}%
+                </span>
+            </p>
+            <p style="color:#888; margin-bottom:0.5rem;">{{ score[1] }}/{{ score[2] }} correct</p>
+            <p style="color:#bbb; font-size:0.95rem;">{{ score[3].strftime('%Y-%m-%d') }}</p>
         </div>
-    </div>
+        {% endif %}
+        {% endfor %}
 </div>
-
 <!-- Full Leaderboard Table -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title mb-0">
-            <i class="fas fa-list-ol me-2"></i>Complete Leaderboard
-        </h5>
+<div class="leaderboard-card">
+    <div class="leaderboard-card-header">
+        <h5><i class="fas fa-list-ol"></i>Complete Leaderboard</h5>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
+    <div class="leaderboard-card-body">
+        <div style="overflow-x:auto;">
+            <table class="leaderboard-table">
                 <thead>
                     <tr>
                         <th>Rank</th>
@@ -88,40 +301,37 @@
                     {% else %}
                     {% set percentage = 0 %}
                     {% endif %}
-                    <tr
-                        class="{{ 'table-warning' if i == 0 else 'table-light' if i == 1 else 'table-danger' if i == 2 else '' }}">
+                    <tr>
                         <td>
                             {% if i == 0 %}
-                            <i class="fas fa-trophy text-warning me-2"></i>
+                            <i class="fas fa-trophy" style="color:#ffb300;"></i>
                             {% elif i == 1 %}
-                            <i class="fas fa-medal text-secondary me-2"></i>
+                            <i class="fas fa-medal" style="color:#bdbdbd;"></i>
                             {% elif i == 2 %}
-                            <i class="fas fa-award text-danger me-2"></i>
+                            <i class="fas fa-award" style="color:#fa709a;"></i>
                             {% endif %}
                             <strong>{{ i + 1 }}</strong>
                         </td>
-                        <td>
-                            <strong>{{ score[0] }}</strong>
-                        </td>
+                        <td><strong>{{ score[0] }}</strong></td>
                         <td>{{ score[1] }}/{{ score[2] }}</td>
                         <td>
                             <span
-                                class="badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
+                                class="leaderboard-badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
                                 {{ percentage }}%
                             </span>
                         </td>
                         <td>{{ score[3].strftime('%Y-%m-%d %H:%M') }}</td>
                         <td>
                             {% if percentage >= 90 %}
-                            <i class="fas fa-star text-warning"></i> Perfect Score
+                            <i class="fas fa-star" style="color:#ffb300;"></i> Perfect Score
                             {% elif percentage >= 80 %}
-                            <i class="fas fa-fire text-danger"></i> Excellent
+                            <i class="fas fa-fire" style="color:#fa709a;"></i> Excellent
                             {% elif percentage >= 70 %}
-                            <i class="fas fa-thumbs-up text-success"></i> Great Job
+                            <i class="fas fa-thumbs-up" style="color:#43e97b;"></i> Great Job
                             {% elif percentage >= 60 %}
-                            <i class="fas fa-check text-primary"></i> Good
+                            <i class="fas fa-check" style="color:#3f51b5;"></i> Good
                             {% else %}
-                            <i class="fas fa-meh text-warning"></i> Keep Trying
+                            <i class="fas fa-meh" style="color:#ffb300;"></i> Keep Trying
                             {% endif %}
                         </td>
                     </tr>
@@ -131,129 +341,96 @@
         </div>
     </div>
 </div>
-
 <!-- Statistics -->
-<div class="row mt-4">
-    <div class="col-md-4">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h4>
-                    {% set unique_users = 0 %}
-                    {% set seen_users = [] %}
-                    {% for score in top_scores %}
-                    {% if score[0] not in seen_users %}
-                    {% set unique_users = unique_users + 1 %}
-                    {% set seen_users = seen_users + [score[0]] %}
-                    {% endif %}
-                    {% endfor %}
-                    {{ unique_users }}
-                </h4>
-                <p class="mb-0">Unique Participants</p>
-            </div>
-        </div>
+<div class="leaderboard-stats-row">
+    <div class="leaderboard-stat-card">
+        <h4>
+            {% set unique_users = 0 %}
+            {% set seen_users = [] %}
+            {% for score in top_scores %}
+            {% if score[0] not in seen_users %}
+            {% set unique_users = unique_users + 1 %}
+            {% set seen_users = seen_users + [score[0]] %}
+            {% endif %}
+            {% endfor %}
+            {{ unique_users }}
+        </h4>
+        <p>Unique Participants</p>
     </div>
-    <div class="col-md-4">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <h4>
-                    {% set total_score = 0 %}
-                    {% set total_questions = 0 %}
-                    {% for score in top_scores %}
-                    {% set total_score = total_score + score[1] %}
-                    {% set total_questions = total_questions + score[2] %}
-                    {% endfor %}
-                    {% if total_questions > 0 %}
-                    {{ "%.1f"|format((total_score / total_questions * 100)|round(1)) }}%
-                    {% else %}
-                    0%
-                    {% endif %}
-                </h4>
-                <p class="mb-0">Average Score</p>
-            </div>
-        </div>
+    <div class="leaderboard-stat-card bg-success">
+        <h4>
+            {% set total_score = 0 %}
+            {% set total_questions = 0 %}
+            {% for score in top_scores %}
+            {% set total_score = total_score + score[1] %}
+            {% set total_questions = total_questions + score[2] %}
+            {% endfor %}
+            {% if total_questions > 0 %}
+            {{ "%.1f"|format((total_score / total_questions * 100)|round(1)) }}%
+            {% else %}
+            0%
+            {% endif %}
+        </h4>
+        <p>Average Score</p>
     </div>
-    <div class="col-md-4">
-        <div class="card bg-warning text-white">
-            <div class="card-body text-center">
-                <h4>
-                    {% set max_score = 0 %}
-                    {% for score in top_scores %}
-                    {% if score[1] > max_score %}
-                    {% set max_score = score[1] %}
-                    {% endif %}
-                    {% endfor %}
-                    {{ max_score }}
-                </h4>
-                <p class="mb-0">Highest Score</p>
-            </div>
-        </div>
+    <div class="leaderboard-stat-card bg-warning">
+        <h4>
+            {% set max_score = 0 %}
+            {% for score in top_scores %}
+            {% if score[1] > max_score %}
+            {% set max_score = score[1] %}
+            {% endif %}
+            {% endfor %}
+            {{ max_score }}
+        </h4>
+        <p>Highest Score</p>
     </div>
 </div>
-
 {% else %}
 <!-- No Leaderboard Data -->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body text-center py-5">
-                <i class="fas fa-trophy fa-4x text-muted mb-3"></i>
-                <h3 class="text-muted">No Leaderboard Data Yet</h3>
-                <p class="text-muted mb-4">Be the first to take a quiz and claim the top spot!</p>
-                {% if session.user_id %}
-                <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-play me-2"></i>Take Quiz Now
-                </a>
-                {% else %}
-                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-user-plus me-2"></i>Join Now
-                </a>
-                {% endif %}
-            </div>
-        </div>
+<div class="leaderboard-card">
+    <div class="leaderboard-card-body leaderboard-empty">
+        <i class="fas fa-trophy"></i>
+        <h3>No Leaderboard Data Yet</h3>
+        <p>Be the first to take a quiz and claim the top spot!</p>
+        {% if session.user_id %}
+        <a href="{{ url_for('quiz') }}" class="leaderboard-btn">
+            <i class="fas fa-play"></i>Take Quiz Now
+        </a>
+        {% else %}
+        <a href="{{ url_for('register') }}" class="leaderboard-btn">
+            <i class="fas fa-user-plus"></i>Join Now
+        </a>
+        {% endif %}
     </div>
 </div>
 {% endif %}
-
 <!-- How to Climb the Leaderboard -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-lightbulb me-2"></i>How to Climb the Leaderboard
-                </h5>
+<div class="leaderboard-card">
+    <div class="leaderboard-card-header">
+        <h5><i class="fas fa-lightbulb"></i>How to Climb the Leaderboard</h5>
+    </div>
+    <div class="leaderboard-card-body">
+        <div class="leaderboard-howto-row">
+            <div class="leaderboard-howto-col">
+                <i class="fas fa-book" style="color:#3f51b5; font-size:2rem; margin-bottom:0.5rem;"></i>
+                <h6>Study Regularly</h6>
+                <p style="color:#888;">Practice makes perfect!</p>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-book fa-2x text-primary mb-2"></i>
-                            <h6>Study Regularly</h6>
-                            <p class="small text-muted">Practice makes perfect!</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-clock fa-2x text-success mb-2"></i>
-                            <h6>Manage Time</h6>
-                            <p class="small text-muted">Answer quickly but accurately</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-redo fa-2x text-warning mb-2"></i>
-                            <h6>Retake Quizzes</h6>
-                            <p class="small text-muted">Improve your scores</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-target fa-2x text-danger mb-2"></i>
-                            <h6>Focus on Weak Areas</h6>
-                            <p class="small text-muted">Identify and improve</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="leaderboard-howto-col">
+                <i class="fas fa-clock" style="color:#43e97b; font-size:2rem; margin-bottom:0.5rem;"></i>
+                <h6>Manage Time</h6>
+                <p style="color:#888;">Answer quickly but accurately</p>
+            </div>
+            <div class="leaderboard-howto-col">
+                <i class="fas fa-redo" style="color:#ffb300; font-size:2rem; margin-bottom:0.5rem;"></i>
+                <h6>Retake Quizzes</h6>
+                <p style="color:#888;">Improve your scores</p>
+            </div>
+            <div class="leaderboard-howto-col">
+                <i class="fas fa-lightbulb" style="color:#fa709a; font-size:2rem; margin-bottom:0.5rem;"></i>
+                <h6>Learn from Mistakes</h6>
+                <p style="color:#888;">Review your answers and grow</p>
             </div>
         </div>
     </div>

@@ -119,7 +119,7 @@ def login():
             cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
             user = cursor.fetchone()
             
-            if user and check_password_hash(user['password_hash'], password):
+            if isinstance(user, dict) and 'password_hash' in user and check_password_hash(user['password_hash'], password):
                 session['user_id'] = user['id']
                 session['username'] = user['username']
                 flash('Login successful!', 'success')
@@ -224,10 +224,22 @@ def results():
             WHERE user_id = %s 
             ORDER BY completed_at DESC
         """, (session['user_id'],))
-        all_results = cursor.fetchall()
-        
+        raw_results = cursor.fetchall()
+        all_results = []
+        for row in raw_results:
+            if isinstance(row, dict):
+                result = row
+                ca = result.get('completed_at')
+                if isinstance(ca, datetime):
+                    result['completed_at'] = ca.strftime('%Y-%m-%d %H:%M')
+                else:
+                    result['completed_at'] = str(ca)[:16] if ca is not None else ''
+                all_results.append(result)
+            elif isinstance(row, tuple):
+                # fallback: just append as-is if tuple
+                all_results.append(row)
         return render_template('results.html', results=all_results)
-        
+    
     except Error as e:
         print(f"Results error: {e}")
         flash('Error loading results.', 'error')
@@ -240,9 +252,8 @@ def results():
 def leaderboard():
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
-    
     try:
-        # Simple query to get all quiz results with user info, ordered by percentage
+        # Top 10 scores for podium and table
         cursor.execute("""
             SELECT u.username, 
                    qr.score, 
@@ -254,23 +265,35 @@ def leaderboard():
             LIMIT 10
         """)
         top_scores = cursor.fetchall()
-        
-        # Convert to list of tuples for template compatibility
         top_scores_list = []
         for score in top_scores:
-            top_scores_list.append((
-                score['username'],
-                score['score'],
-                score['total_questions'],
-                score['completed_at']
-            ))
-        
-        return render_template('leaderboard.html', top_scores=top_scores_list)
-        
+            if isinstance(score, dict) and 'username' in score and 'score' in score and 'total_questions' in score and 'completed_at' in score:
+                top_scores_list.append((
+                    score['username'],
+                    score['score'],
+                    score['total_questions'],
+                    score['completed_at']
+                ))
+        # Unique participants
+        cursor.execute("SELECT COUNT(DISTINCT user_id) AS unique_participants FROM quiz_results")
+        unique_row = cursor.fetchone()
+        unique_participants = unique_row['unique_participants'] if isinstance(unique_row, dict) and 'unique_participants' in unique_row else 0
+        # Average score (percentage)
+        cursor.execute("SELECT SUM(score) AS total_score, SUM(total_questions) AS total_questions FROM quiz_results")
+        row = cursor.fetchone()
+        if isinstance(row, dict) and row.get('total_questions') and row['total_questions'] > 0:
+            average_score = round((row['total_score'] / row['total_questions']) * 100, 1)
+        else:
+            average_score = 0
+        # Highest score
+        cursor.execute("SELECT MAX(score) AS highest_score FROM quiz_results")
+        high_row = cursor.fetchone()
+        highest_score = high_row['highest_score'] if isinstance(high_row, dict) and high_row['highest_score'] is not None else 0
+        return render_template('leaderboard.html', top_scores=top_scores_list, unique_participants=unique_participants, average_score=average_score, highest_score=highest_score)
     except Error as e:
         print(f"Leaderboard error: {e}")
         flash('Error loading leaderboard.', 'error')
-        return render_template('leaderboard.html', top_scores=[])
+        return render_template('leaderboard.html', top_scores=[], unique_participants=0, average_score=0, highest_score=0)
     finally:
         cursor.close()
         connection.close()

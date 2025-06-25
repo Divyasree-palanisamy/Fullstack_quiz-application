@@ -9,6 +9,11 @@
     --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
 }
 
+html,
+body {
+    overflow-x: hidden;
+}
+
 body {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     min-height: 100vh;

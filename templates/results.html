@@ -258,12 +258,12 @@
                 <tbody>
                     {% for result in results %}
                     <tr>
-                        <td>{{ result.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ result.completed_at }}</td>
                         <td><strong>{{ result.score }}/{{ result.total_questions }}</strong></td>
                         <td>
                             {% set percentage = (result.score / result.total_questions * 100)|round(1) %}
                             <span
-                                class="results-badge bg-{{ 'success' if percentage >= 70 else 'warning' if percentage >= 50 else 'danger' }}">
+                                class="results-badge bg-{{ 'success' if percentage >= 70 else ('warning' if percentage >= 50 else 'danger') }}">
                                 {{ percentage }}%
                             </span>
                         </td>
@@ -339,20 +339,18 @@
 {% block scripts %}
 {% if results %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="application/json" id="results-json">{{ results|tojson|safe }}</script>
 <script>
     // Performance Chart
     const ctx = document.getElementById('performanceChart').getContext('2d');
-    const results = {{ results| tojson }};
-
-    const labels = results.map(result => {
+    const resultsData = JSON.parse(document.getElementById('results-json').textContent);
+    const labels = resultsData.map(result => {
         const date = new Date(result.completed_at);
         return date.toLocaleDateString();
     }).reverse();
-
-    const data = results.map(result => {
+    const data = resultsData.map(result => {
         return (result.score / result.total_questions * 100).toFixed(1);
     }).reverse();
-
     new Chart(ctx, {
         type: 'line',
         data: {

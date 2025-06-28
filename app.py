@@ -5,61 +5,64 @@ from datetime import datetime, timedelta
 import mysql.connector
 from mysql.connector import connect, Error
 import re
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv('SECRET_KEY', 'your_secret_key')
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
 # Database connection function
 def get_db_connection():
     return connect(
-        host="localhost",
-        user="root",
-        password="Divya@2004",
-        database="uo"
+        host=os.getenv('DB_HOST', 'localhost'),
+        user=os.getenv('DB_USER', 'root'),
+        password=os.getenv('DB_PASSWORD', 'Divya@2004'),
+        database=os.getenv('DB_NAME', 'uo')
     )
-
-# Initialize database connection
-conn = get_db_connection()
-mycursor = conn.cursor(dictionary=True)
 
 # Create tables if they don't exist
 def create_tables():
     try:
-        cursor = conn.cursor()
+        connection = get_db_connection()
+        cursor = connection.cursor()
         
         # Create users table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 username VARCHAR(80) UNIQUE NOT NULL,
                 email VARCHAR(120) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
         
         # Create quiz_results table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS quiz_results (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                score INT NOT NULL,
-                total_questions INT NOT NULL,
-                time_taken INT NOT NULL,
-                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL,
+                score INTEGER NOT NULL,
+                total_questions INTEGER NOT NULL,
+                time_taken INTEGER NOT NULL,
+                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 quiz_type VARCHAR(50) DEFAULT 'general',
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         """)
         
-        conn.commit()
+        connection.commit()
         print("Tables created successfully!")
         
     except Error as e:
         print(f"Error creating tables: {e}")
     finally:
         cursor.close()
+        connection.close()
 
 # Routes
 @app.route('/')
@@ -299,6 +302,11 @@ def leaderboard():
         connection.close()
 
 if __name__ == '__main__':
-    # Create tables when the app starts
+    # Create tables on startup
     create_tables()
-    app.run(debug=True) 
+    
+    # Run the app
+    port = int(os.getenv('PORT', 5000))
+    debug = os.getenv('FLASK_ENV') == 'development'
+    
+    app.run(host='0.0.0.0', port=port, debug=debug) 

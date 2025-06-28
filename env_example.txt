@@ -1,0 +1,12 @@
+# Flask Configuration
+SECRET_KEY=your_secret_key_here
+FLASK_ENV=production
+
+# Database Configuration
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=uo
+
+# Server Configuration
+PORT=5000 

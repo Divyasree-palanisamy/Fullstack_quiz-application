@@ -18,10 +18,11 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 # Database connection function
 def get_db_connection():
     return connect(
-        host=os.getenv('DB_HOST', 'localhost'),
-        user=os.getenv('DB_USER', 'root'),
-        password=os.getenv('DB_PASSWORD', 'Divya@2004'),
-        database=os.getenv('DB_NAME', 'uo')
+        host=os.getenv('MYSQLHOST'),
+        user=os.getenv('MYSQLUSER'),
+        password=os.getenv('MYSQLPASSWORD'),
+        database=os.getenv('MYSQLDATABASE'),
+        port=int(os.getenv('MYSQLPORT', 3306))
     )
 
 # Create tables if they don't exist
@@ -33,23 +34,23 @@ def create_tables():
         # Create users table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
+                id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(80) UNIQUE NOT NULL,
                 email VARCHAR(120) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
         
         # Create quiz_results table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS quiz_results (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER NOT NULL,
-                score INTEGER NOT NULL,
-                total_questions INTEGER NOT NULL,
-                time_taken INTEGER NOT NULL,
-                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                score INT NOT NULL,
+                total_questions INT NOT NULL,
+                time_taken INT NOT NULL,
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 quiz_type VARCHAR(50) DEFAULT 'general',
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )

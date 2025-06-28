@@ -1,25 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Take Quiz - Quiz Master{% endblock %}
+{% block title %}Quiz - Quiz Master{% endblock %}
 
 {% block content %}
 <style>
     .quiz-page-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 80vh;
-        background: none;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem 0;
     }
 
     .quiz-main {
-        width: 100%;
-        max-width: 700px;
-        margin: 40px 0;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 1rem;
     }
 
     .quiz-card {
-        background: #e3f0ff;
+        background: #fff;
         border-radius: 20px;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         overflow: hidden;
@@ -28,129 +26,218 @@
     .quiz-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: #fff;
-        padding: 1.5rem 2rem;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
+        padding: 2rem;
+        text-align: center;
     }
 
     .quiz-header h3 {
         margin: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        font-size: 2rem;
+        font-weight: 700;
     }
 
     .quiz-body {
         padding: 2rem;
     }
 
+    /* Quiz Setup Styles */
+    .quiz-setup {
+        text-align: center;
+    }
+
+    .setup-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a237e;
+        margin-bottom: 1rem;
+    }
+
+    .setup-subtitle {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .setup-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .setup-option {
+        background: #f8f9ff;
+        border: 2px solid #e3f0ff;
+        border-radius: 15px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .setup-option:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    }
+
+    .setup-option.selected {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+    }
+
+    .setup-option h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .setup-option p {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    .setup-option i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .setup-option.selected i {
+        color: #fff;
+    }
+
+    .setup-option:not(.selected) i {
+        color: #667eea;
+    }
+
+    /* Quiz Interface Styles */
+    .quiz-interface {
+        display: none;
+    }
+
+    .quiz-interface.active {
+        display: block;
+    }
+
     .progress {
-        height: 25px;
+        height: 10px;
         border-radius: 10px;
-        background: #b3c6e6;
+        background: #e3f0ff;
         overflow: hidden;
-        margin-bottom: 1.5rem;
+        margin: 1rem 0;
     }
 
     .progress-bar {
+        height: 100%;
         background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         border-radius: 10px;
-        height: 100%;
         transition: width 0.5s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #1a237e;
+        position: relative;
+    }
+
+    .progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 
     .quiz-flex {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 
     .timer-container {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
         display: flex;
         align-items: center;
-        font-weight: 600;
-        color: #1a237e;
-        font-size: 1.1rem;
-    }
-
-    .timer-container i {
-        color: #ffb300;
-        margin-right: 0.5rem;
+        gap: 0.5rem;
     }
 
     .question-counter {
-        font-weight: 600;
+        background: #f5faff;
         color: #1a237e;
-        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
     }
 
     .question-section {
-        margin-bottom: 2rem;
+        margin: 2rem 0;
     }
 
-    #question {
-        font-weight: 700;
+    .question-section h4 {
+        font-size: 1.3rem;
         color: #1a237e;
-        font-size: 1.2rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
     }
 
     .options-container {
-        margin-bottom: 2rem;
+        display: grid;
+        gap: 1rem;
     }
 
-    .option-btn {
+    .option {
         background: #f5faff;
         color: #1a237e;
         border: 2px solid #b3c6e6;
         border-radius: 12px;
         padding: 1rem 1.5rem;
-        margin: 0.5rem 0;
         text-align: left;
         transition: all 0.3s ease;
         cursor: pointer;
         font-weight: 500;
-        width: 100%;
-        display: block;
+        font-size: 1rem;
     }
 
-    .option-btn:hover {
+    .option:hover {
         border-color: #5c6bc0;
         background: #e3f0ff;
-        color: #283593;
         transform: translateX(5px);
+        color: #283593;
     }
 
-    .option-btn.correct {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    .option.correct {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         color: #fff;
         border-color: transparent;
     }
 
-    .option-btn.incorrect {
+    .option.incorrect {
         background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         color: #fff;
         border-color: transparent;
     }
 
-    .option-btn.selected {
+    .option.selected {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: #fff;
         border-color: transparent;
+    }
+
+    .option.disabled {
+        pointer-events: none;
     }
 
     .quiz-nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin: 2rem 0;
         gap: 1rem;
     }
 
@@ -194,6 +281,11 @@
         cursor: not-allowed;
     }
 
+    .quiz-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
     .text-center {
         text-align: center;
     }
@@ -202,6 +294,46 @@
         margin-top: 2rem;
     }
 
+    /* Start Quiz Button */
+    .start-quiz-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 3rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .start-quiz-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .start-quiz-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Score Display */
+    .score-display {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .score-display h2 {
+        color: #1a237e;
+        margin-bottom: 1rem;
+    }
+
+    /* Responsive Design */
     @media (max-width: 600px) {
         .quiz-main {
             max-width: 100%;
@@ -215,8 +347,61 @@
         .quiz-header {
             padding: 1rem;
         }
+
+        .setup-options {
+            grid-template-columns: 1fr;
+        }
+
+        .quiz-flex {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .quiz-nav {
+            flex-direction: column;
+        }
+
+        .quiz-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* Dark Theme Support */
+    .dark-theme {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    }
+
+    .dark-theme .quiz-card {
+        background: #2c3e50;
+        color: #fff;
+    }
+
+    .dark-theme .setup-option {
+        background: #34495e;
+        border-color: #4a5f7a;
+        color: #fff;
+    }
+
+    .dark-theme .setup-option:hover {
+        border-color: #667eea;
+    }
+
+    .dark-theme .question-section h4 {
+        color: #fff;
+    }
+
+    .dark-theme .option {
+        background: #34495e;
+        border-color: #4a5f7a;
+        color: #fff;
+    }
+
+    .dark-theme .option:hover {
+        background: #4a5f7a;
     }
 </style>
+
 <div class="quiz-page-wrapper">
     <div class="quiz-main">
         <div class="quiz-card">
@@ -224,44 +409,162 @@
                 <h3><i class="fas fa-question-circle"></i>Quiz Master</h3>
             </div>
             <div class="quiz-body">
-                <div class="progress">
-                    <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%">
-                        <span id="progressText">0%</span>
+                <!-- Quiz Setup Screen -->
+                <div class="quiz-setup" id="quizSetup">
+                    <div class="setup-title">Choose Your Quiz Settings</div>
+                    <div class="setup-subtitle">Customize your learning experience</div>
+
+                    <!-- Category Selection -->
+                    <div class="setup-section">
+                        <h4 style="color: #1a237e; margin-bottom: 1rem;">Select Category</h4>
+                        <div class="setup-options" id="categoryOptions">
+                            <div class="setup-option" data-category="all">
+                                <i class="fas fa-globe"></i>
+                                <h4>All Categories</h4>
+                                <p>Mixed questions from all topics</p>
+                            </div>
+                            <div class="setup-option" data-category="basics">
+                                <i class="fas fa-rocket"></i>
+                                <h4>React Basics</h4>
+                                <p>Fundamental React concepts</p>
+                            </div>
+                            <div class="setup-option" data-category="hooks">
+                                <i class="fas fa-link"></i>
+                                <h4>React Hooks</h4>
+                                <p>useState, useEffect, and more</p>
+                            </div>
+                            <div class="setup-option" data-category="advanced">
+                                <i class="fas fa-crown"></i>
+                                <h4>Advanced React</h4>
+                                <p>Complex React patterns</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="quiz-flex">
-                    <div class="timer-container">
-                        <i class="fas fa-clock"></i>
-                        <span id="timer">60</span> seconds
+
+                    <!-- Difficulty Selection -->
+                    <div class="setup-section">
+                        <h4 style="color: #1a237e; margin-bottom: 1rem;">Select Difficulty</h4>
+                        <div class="setup-options" id="difficultyOptions">
+                            <div class="setup-option" data-difficulty="easy">
+                                <i class="fas fa-seedling"></i>
+                                <h4>Easy</h4>
+                                <p>Perfect for beginners</p>
+                            </div>
+                            <div class="setup-option" data-difficulty="medium">
+                                <i class="fas fa-tree"></i>
+                                <h4>Medium</h4>
+                                <p>For intermediate learners</p>
+                            </div>
+                            <div class="setup-option" data-difficulty="hard">
+                                <i class="fas fa-fire"></i>
+                                <h4>Hard</h4>
+                                <p>Challenge yourself</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="question-counter">
-                        Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+
+                    <!-- Question Count -->
+                    <div class="setup-section">
+                        <h4 style="color: #1a237e; margin-bottom: 1rem;">Number of Questions</h4>
+                        <div class="setup-options" id="questionCountOptions">
+                            <div class="setup-option" data-count="5">
+                                <i class="fas fa-star"></i>
+                                <h4>5 Questions</h4>
+                                <p>Quick practice</p>
+                            </div>
+                            <div class="setup-option" data-count="10">
+                                <i class="fas fa-star"></i>
+                                <h4>10 Questions</h4>
+                                <p>Standard quiz</p>
+                            </div>
+                            <div class="setup-option" data-count="15">
+                                <i class="fas fa-star"></i>
+                                <h4>15 Questions</h4>
+                                <p>Extended practice</p>
+                            </div>
+                            <div class="setup-option" data-count="20">
+                                <i class="fas fa-star"></i>
+                                <h4>20 Questions</h4>
+                                <p>Comprehensive test</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="question-section">
-                    <h4 id="question">Loading question...</h4>
-                </div>
-                <div id="options" class="options-container">
-                    <!-- Options will be loaded here -->
-                </div>
-                <div class="quiz-nav">
-                    <button id="prevBtn" class="quiz-btn secondary" style="display: none;">
-                        <i class="fas fa-arrow-left"></i>Previous
+
+                    <!-- Timer Settings -->
+                    <div class="setup-section">
+                        <h4 style="color: #1a237e; margin-bottom: 1rem;">Timer Settings</h4>
+                        <div class="setup-options" id="timerOptions">
+                            <div class="setup-option" data-timer="30">
+                                <i class="fas fa-clock"></i>
+                                <h4>30 Seconds</h4>
+                                <p>Quick thinking</p>
+                            </div>
+                            <div class="setup-option" data-timer="60">
+                                <i class="fas fa-clock"></i>
+                                <h4>60 Seconds</h4>
+                                <p>Standard time</p>
+                            </div>
+                            <div class="setup-option" data-timer="120">
+                                <i class="fas fa-clock"></i>
+                                <h4>120 Seconds</h4>
+                                <p>Relaxed pace</p>
+                            </div>
+                            <div class="setup-option" data-timer="0">
+                                <i class="fas fa-infinity"></i>
+                                <h4>No Timer</h4>
+                                <p>Study mode</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="start-quiz-btn" id="startQuizBtn" disabled>
+                        <i class="fas fa-play"></i>
+                        Start Quiz
                     </button>
-                    <button id="nextBtn" class="quiz-btn primary">
-                        Next<i class="fas fa-arrow-right"></i>
-                    </button>
                 </div>
-                <div id="score" class="mt-4 text-center" style="display: none;"></div>
-                <div class="text-center mt-4">
-                    <button id="resetBtn" class="quiz-btn warning" style="display: none;">
-                        <i class="fas fa-redo"></i>Take Another Quiz
-                    </button>
+
+                <!-- Quiz Interface -->
+                <div class="quiz-interface" id="quizInterface">
+                    <div class="progress">
+                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%">
+                            <span id="progressText" class="progress-text">0%</span>
+                        </div>
+                    </div>
+                    <div class="quiz-flex">
+                        <div class="timer-container">
+                            <i class="fas fa-clock"></i>
+                            <span id="timer">60</span> seconds
+                        </div>
+                        <div class="question-counter">
+                            Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+                        </div>
+                    </div>
+                    <div class="question-section">
+                        <h4 id="question">Loading question...</h4>
+                    </div>
+                    <div id="options" class="options-container">
+                        <!-- Options will be loaded here -->
+                    </div>
+                    <div class="quiz-nav">
+                        <button id="prevBtn" class="quiz-btn secondary" style="display: none;">
+                            <i class="fas fa-arrow-left"></i>Previous
+                        </button>
+                        <button id="nextBtn" class="quiz-btn primary">
+                            Next<i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div id="score" class="mt-4 text-center" style="display: none;"></div>
+                    <div class="text-center mt-4">
+                        <button id="resetBtn" class="quiz-btn warning" style="display: none;">
+                            <i class="fas fa-redo"></i>Take Another Quiz
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Audio Elements -->
 <audio id="correctSound" src="{{ url_for('static', filename='sounds/correct.mp3') }}"></audio>
 <audio id="wrongSound" src="{{ url_for('static', filename='sounds/wrong.mp3') }}"></audio>

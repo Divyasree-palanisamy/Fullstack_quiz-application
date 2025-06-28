@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS quiz_results (
     quiz_type VARCHAR(50) DEFAULT 'general',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
+select * from quiz_results;
 CREATE INDEX idx_user_username ON users(username);
 CREATE INDEX idx_user_email ON users(email);
 CREATE INDEX idx_quiz_result_user_id ON quiz_results(user_id);

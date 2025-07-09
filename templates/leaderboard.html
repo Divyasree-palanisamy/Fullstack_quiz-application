@@ -268,7 +268,7 @@
     <p>See who's leading the pack in Quiz Master!</p>
 </div>
 {% if top_scores %}
-<!-- Top 3 Podium -->
+
 <div class="podium-row">
     {% for i in range(3) %}
     {% if i < top_scores|length %} {% set score=top_scores[i] %} {% if score[2]> 0 %}
